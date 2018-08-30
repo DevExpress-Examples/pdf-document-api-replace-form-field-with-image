@@ -13,7 +13,7 @@ To accomplish this task it is necessary to remove a certain field with an annota
 
 -	Add graphics to a page foreground by calling the <a href="https://documentation.devexpress.com/CoreLibraries/DevExpress.Pdf.PdfGraphics.AddToPageForeground.overloads">PdfGraphics.AddToPageForeground</a> overload method and pass 72 as a DPI value. This method automatically converts <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems">world coordinates</a> to <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems">page coordinates</a>. Passing 72 as a DPI value to this method allows transforming coordinates without any scaling. See <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems">Coordinate Systems</a> for more details. 
 -	Remove the form field calling the <a href="https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.RemoveFormField.method">PdfDocumentProcessor.RemoveFormField</a> method. 
--	Save the resulting document calling the <a href="https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.SaveDocument.overloadss">PdfDocumentProcessor.SaveDocument</a> overload method. 
+-	Save the resulting document calling the <a href="https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.SaveDocument.overloads">PdfDocumentProcessor.SaveDocument</a> overload method. 
 
 <br/>
 
