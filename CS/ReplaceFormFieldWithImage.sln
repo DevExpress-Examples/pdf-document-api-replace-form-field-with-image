@@ -1,8 +1,9 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplaceFormFieldWithImage", "ExportInteractiveForms\ReplaceFormFieldWithImage.csproj", "{E9499ACE-0795-45DA-8D03-1CA97ABDDFBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplaceFormFieldWithImage", "ReplaceFormFieldWithImage\ReplaceFormFieldWithImage.csproj", "{E9499ACE-0795-45DA-8D03-1CA97ABDDFBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6DD71471-3AAF-4D48-898C-736954C2348F}
+		SolutionGuid = {6AE6B396-4520-463B-85EA-14A98834092D}
 	EndGlobalSection
 EndGlobal
