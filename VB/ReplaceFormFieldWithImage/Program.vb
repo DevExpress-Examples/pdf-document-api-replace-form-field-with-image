@@ -39,8 +39,8 @@ Namespace ReplaceFormFieldWithImage
 
             Dim aspectRatio As Double = image.Width \ image.Height
 
-            Dim scaleX As Double = image.Width \ rect.Width
-            Dim scaleY As Double = image.Height \ rect.Height
+            Dim scaleX As Double = image.Width \ CInt(rect.Width)
+            Dim scaleY As Double = image.Height \ CInt(rect.Height)
 
             Dim width As Double
             Dim height As Double
