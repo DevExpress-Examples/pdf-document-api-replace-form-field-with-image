@@ -3,32 +3,39 @@ using DevExpress.Pdf;
 
 namespace ReplaceFormFieldWithImage {
     class Program {
-        static void Main(string[] args) {
-
-            using (PdfDocumentProcessor processor = new PdfDocumentProcessor()) {
+        static void Main(string[] args)
+        {
+            const float dpix = 72f;
+            const float dpiY = 72f;
+            using (PdfDocumentProcessor processor = new PdfDocumentProcessor())
+            {
 
                 // Load a PDF document with AcroForm data. 
                 processor.LoadDocument("..\\..\\InteractiveForm.pdf");
+                PdfDocumentFacade documentFacade = processor.DocumentFacade;
+                PdfAcroFormFacade acroForm = documentFacade.AcroForm;
+                string fieldName = "Address";
+                PdfTextFormFieldFacade formField = acroForm.GetFormField(fieldName) as PdfTextFormFieldFacade;
+                if (formField == null) return;
 
-                foreach (PdfInteractiveFormField field in processor.Document.AcroForm.Fields) {
+                foreach (PdfWidgetFacade widget in formField)
+                {
+                    PdfRectangle rect = widget.Rectangle;
+                    PdfPage page = processor.Document.Pages[widget.PageNumber - 1];
+                    double x = rect.Left - page.CropBox.Left;
+                    double y = page.CropBox.Top - rect.Bottom;
 
-                    if (field.Name == "Address") {
+                    // Create graphics and draw an image.
+                    using (PdfGraphics graphics = processor.CreateGraphics())
+                    {
+                        DrawImage(graphics, rect, x, y);
 
-                        PdfRectangle cropBox = field.Widget.Page.CropBox;
-                        PdfRectangle rect = field.Widget.Rect;
-
-                        double x = rect.Left - cropBox.Left;
-                        double y = cropBox.Top - rect.Bottom;
-
-                        // Create graphics and draw an image.
-                        using (PdfGraphics graphics = processor.CreateGraphics()) {
-                            DrawImage(graphics, rect, x, y);
-
-                            graphics.AddToPageForeground(processor.Document.Pages[0], 72, 72);
-                        }
+                        graphics.AddToPageForeground(page, dpix, dpiY);
                     }
+
+
                 }
-                processor.RemoveFormField("Address");
+                processor.RemoveFormField(fieldName);
                 processor.SaveDocument("..\\..\\Result.pdf");
             }
         }
