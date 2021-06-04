@@ -2,61 +2,66 @@
 Imports DevExpress.Pdf
 
 Namespace ReplaceFormFieldWithImage
-    Friend Class Program
-        Shared Sub Main(ByVal args() As String)
+	Friend Class Program
+		Shared Sub Main(ByVal args() As String)
+			Const dpix As Single = 72F
+			Const dpiY As Single = 72F
+			Using processor As New PdfDocumentProcessor()
 
-            Using processor As New PdfDocumentProcessor()
+				' Load a PDF document with AcroForm data. 
+				processor.LoadDocument("..\..\InteractiveForm.pdf")
+				Dim documentFacade As PdfDocumentFacade = processor.DocumentFacade
+				Dim acroForm As PdfAcroFormFacade = documentFacade.AcroForm
+				Dim fieldName As String = "Address"
+				Dim formField As PdfTextFormFieldFacade = TryCast(acroForm.GetFormField(fieldName), PdfTextFormFieldFacade)
+				If formField Is Nothing Then
+					Return
+				End If
 
-                ' Load a PDF document with AcroForm data. 
-                processor.LoadDocument("..\..\InteractiveForm.pdf")
+				For Each widget As PdfWidgetFacade In formField
+					Dim rect As PdfRectangle = widget.Rectangle
+					Dim page As PdfPage = processor.Document.Pages(widget.PageNumber - 1)
+					Dim x As Double = rect.Left - page.CropBox.Left
+					Dim y As Double = page.CropBox.Top - rect.Bottom
 
-                For Each field As PdfInteractiveFormField In processor.Document.AcroForm.Fields
+					' Create graphics and draw an image.
+					Using graphics As PdfGraphics = processor.CreateGraphics()
+						DrawImage(graphics, rect, x, y)
 
-                    If field.Name = "Address" Then
+						graphics.AddToPageForeground(page, dpix, dpiY)
+					End Using
 
-                        Dim cropBox As PdfRectangle = field.Widget.Page.CropBox
-                        Dim rect As PdfRectangle = field.Widget.Rect
 
-                        Dim x As Double = rect.Left - cropBox.Left
-                        Dim y As Double = cropBox.Top - rect.Bottom
+				Next widget
+				processor.RemoveFormField(fieldName)
+				processor.SaveDocument("..\..\Result.pdf")
+			End Using
+		End Sub
 
-                        ' Create graphics and draw an image.
-                        Using graphics As PdfGraphics = processor.CreateGraphics()
-                            DrawImage(graphics, rect, x, y)
+		Private Shared Sub DrawImage(ByVal graphics As PdfGraphics, ByVal rect As PdfRectangle, ByVal x As Double, ByVal y As Double)
 
-                            graphics.AddToPageForeground(processor.Document.Pages(0), 72, 72)
-                        End Using
-                    End If
-                Next field
-                processor.RemoveFormField("Address")
-                processor.SaveDocument("..\..\Result.pdf")
-            End Using
-        End Sub
+			Dim image As New Bitmap("..\..\AddressFormField.png")
 
-        Private Shared Sub DrawImage(ByVal graphics As PdfGraphics, ByVal rect As PdfRectangle, ByVal x As Double, ByVal y As Double)
+			Dim aspectRatio As Double = image.Width \ image.Height
 
-            Dim image As New Bitmap("..\..\AddressFormField.png")
+			Dim scaleX As Double = image.Width \ rect.Width
+			Dim scaleY As Double = image.Height \ rect.Height
 
-            Dim aspectRatio As Double = image.Width \ image.Height
+			Dim width As Double
+			Dim height As Double
 
-            Dim scaleX As Double = image.Width \ CInt(rect.Width)
-            Dim scaleY As Double = image.Height \ CInt(rect.Height)
+			If scaleX < scaleY Then
 
-            Dim width As Double
-            Dim height As Double
+				width = rect.Width
+				height = width / aspectRatio
 
-            If scaleX < scaleY Then
+			Else
+				height = rect.Height
+				width = height * aspectRatio
+			End If
 
-                width = rect.Width
-                height = width / aspectRatio
-
-            Else
-                height = rect.Height
-                width = height * aspectRatio
-            End If
-
-            Dim imageRect As New RectangleF(CSng(x), CSng(y - height), CSng(width), CSng(height))
-            graphics.DrawImage(image, imageRect)
-        End Sub
-    End Class
+			Dim imageRect As New RectangleF(CSng(x), CSng(y - height), CSng(width), CSng(height))
+			graphics.DrawImage(image, imageRect)
+		End Sub
+	End Class
 End Namespace
