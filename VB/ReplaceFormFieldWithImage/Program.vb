@@ -4,34 +4,39 @@ Imports DevExpress.Pdf
 Namespace ReplaceFormFieldWithImage
     Friend Class Program
         Shared Sub Main(ByVal args() As String)
+			Const dpix As Single = 72.0F
+			Const dpiY As Single = 72.0F
+			Using processor As New PdfDocumentProcessor()
 
-            Using processor As New PdfDocumentProcessor()
+				' Load a PDF document with AcroForm data. 
+				processor.LoadDocument("..\..\InteractiveForm.pdf")
+				Dim documentFacade As PdfDocumentFacade = processor.DocumentFacade
+				Dim acroForm As PdfAcroFormFacade = documentFacade.AcroForm
+				Dim fieldName As String = "Address"
+				Dim formField As PdfTextFormFieldFacade = TryCast(acroForm.GetFormField(fieldName), PdfTextFormFieldFacade)
+				If formField Is Nothing Then
+					Return
+				End If
 
-                ' Load a PDF document with AcroForm data. 
-                processor.LoadDocument("..\..\InteractiveForm.pdf")
+				For Each widget As PdfWidgetFacade In formField
+					Dim rect As PdfRectangle = widget.Rectangle
+					Dim page As PdfPage = processor.Document.Pages(widget.PageNumber - 1)
+					Dim x As Double = rect.Left - page.CropBox.Left
+					Dim y As Double = page.CropBox.Top - rect.Bottom
 
-                For Each field As PdfInteractiveFormField In processor.Document.AcroForm.Fields
+					' Create graphics and draw an image.
+					Using graphics As PdfGraphics = processor.CreateGraphics()
+						DrawImage(graphics, rect, x, y)
 
-                    If field.Name = "Address" Then
+						graphics.AddToPageForeground(page, dpix, dpiY)
+					End Using
 
-                        Dim cropBox As PdfRectangle = field.Widget.Page.CropBox
-                        Dim rect As PdfRectangle = field.Widget.Rect
 
-                        Dim x As Double = rect.Left - cropBox.Left
-                        Dim y As Double = cropBox.Top - rect.Bottom
-
-                        ' Create graphics and draw an image.
-                        Using graphics As PdfGraphics = processor.CreateGraphics()
-                            DrawImage(graphics, rect, x, y)
-
-                            graphics.AddToPageForeground(processor.Document.Pages(0), 72, 72)
-                        End Using
-                    End If
-                Next field
-                processor.RemoveFormField("Address")
-                processor.SaveDocument("..\..\Result.pdf")
-            End Using
-        End Sub
+				Next widget
+				processor.RemoveFormField(fieldName)
+				processor.SaveDocument("..\..\Result.pdf")
+			End Using
+		End Sub
 
         Private Shared Sub DrawImage(ByVal graphics As PdfGraphics, ByVal rect As PdfRectangle, ByVal x As Double, ByVal y As Double)
 
