@@ -9,17 +9,22 @@ This example shows how to substitute a text form field with an image.
 
 To accomplish this task it is necessary to remove a certain field with an annotation and substitute it with an image since widget annotations are drawn over the page content.
 
--	Obtain a required form field using the <a href="https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfAcroFormFacade.GetFormField(System.String)">PdfAcroFormFacade.GetFormField</a> method. The PdfAcroFormFacade object can be accessed using the <a href="https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentFacade.AcroForm"> PdfDocumentFacade.AcroForm</a> property.
+- Use the [PdfAcroFormFacade.GetFormField](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfAcroFormFacade.GetFormField(System.String)) method to obtain a required form field. The [PdfDocumentFacade.AcroForm](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentFacade.AcroForm) property allows you to access the`PdfAcroFormFacade` object.
 
--	Obtain the widget annotations using the <a href="https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfFormFieldFacade-2.Widgets"> PdfFormFieldFacade<T, V>.Widgets </a> property and get the annotation rectangle (defines the annotation location on the page) via the <a href="https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfWidgetFacade.Rectangle">PdfWidgetFacade.Rectangle</a> property. Note that this property is measured in default user space units. 
+- Obtain the widget annotations using the [PdfFormFieldFacade<T, V>.Widgets](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfFormFieldFacade-2.Widgets) property and get the annotation rectangle (defines the annotation location on the page) via the [PdfWidgetFacade.Rectangle](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfWidgetFacade.Rectangle) property. Note that this property is measured in default user space units.
 
--	Use the <a href="https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfWidgetFacade.PageNumber">PdfWidgetFacade.PageNumber</a> property to get the page where the annotation is located. After that obtain the page boundaries defined by the crop box in the <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems#User">user coordinate system</a> using the <a href="https://documentation.devexpress.com/CoreLibraries/DevExpress.Pdf.PdfPageTreeObject.CropBox.property">PdfPageTreeObject.CropBox</a> property. 
--	To draw an image at the form field position on the page, use the <a href="https://documentation.devexpress.com/CoreLibraries/DevExpress.Pdf.PdfGraphics.DrawImage.method(RvMF4Q)">PdfGraphics.DrawImage</a>  overload method of the **PdfGraphics** class.
+- Use the [PdfWidgetFacade.PageNumber](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfWidgetFacade.PageNumber) property to get the page where the annotation is located. After that obtain the page boundaries defined by the crop box in the [user coordinate system](https://docs.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems#User) using the [PdfPageTreeObject.CropBox](https://documentation.devexpress.com/CoreLibraries/DevExpress.Pdf.PdfPageTreeObject.CropBox.property) property.
+- To draw an image at the form field position on the page, use the [PdfGraphics.DrawImage](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfGraphics.DrawImage.overloads)  overload method of the `PdfGraphics` class.
 
--	Add graphics to a page foreground by calling the <a href="https://documentation.devexpress.com/CoreLibraries/DevExpress.Pdf.PdfGraphics.AddToPageForeground.overloads">PdfGraphics.AddToPageForeground</a> overload method and pass 72 as a DPI value. This method automatically converts <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems#World">world coordinates</a> to <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems#Page">page coordinates</a>. Passing 72 as a DPI value to this method allows transforming coordinates without any scaling. See <a href="https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems">Coordinate Systems</a> for more details. 
--	Remove the form field calling the <a href="https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.RemoveFormField.method">PdfDocumentProcessor.RemoveFormField</a> method. 
--	Save the resulting document calling the <a href="https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.SaveDocument.overloads">PdfDocumentProcessor.SaveDocument</a> overload method. 
+- Call the [PdfGraphics.AddToPageForeground](https://docs.devexpress.com/OfficeFileAPI/devexpress.pdf.pdfgraphics.addtopageforeground.overloads) overload to add graphics to a page foreground. This method automatically converts [world coordinates](https://docs.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems#World) to [page coordinates](https://docs.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems#Page). Pass `72` as a `dpi` parameter to this method to transform coordinates without any scaling.
+- Call the [PdfDocumentProcessor.RemoveFormField](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.RemoveFormField.method) method to remove the form field.
+- Use the [PdfDocumentProcessor.SaveDocument](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.SaveDocument.overloads)  method to save the resulting document.
 
-<br/>
+## Files To Review
 
+- [Program.cs](./CS/ReplaceFormFieldWithImage/Program.cs) (VB: [Program.vb](./VB/ReplaceFormFieldWithImage/Program.vb))
 
+## Documentation
+
+- [Coordinate Systems](https://docs.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems)
+- [Interactive Forms in PDF Documents](https://docs.devexpress.com/OfficeFileAPI/118284/pdf-document-api/interactive-forms)
