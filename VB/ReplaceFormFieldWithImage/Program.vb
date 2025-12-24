@@ -1,5 +1,6 @@
 Imports System.Drawing
 Imports DevExpress.Pdf
+Imports System.Diagnostics
 
 Namespace ReplaceFormFieldWithImage
 
@@ -9,8 +10,8 @@ Namespace ReplaceFormFieldWithImage
             Const dpix As Single = 72F
             Const dpiY As Single = 72F
             Using processor As PdfDocumentProcessor = New PdfDocumentProcessor()
-                ' Load a PDF document with AcroForm data. 
-                processor.LoadDocument("..\..\InteractiveForm.pdf")
+                ' Load a PDF document with AcroForm data.
+                processor.LoadDocument("..\..\..\InteractiveForm.pdf")
                 Dim documentFacade As PdfDocumentFacade = processor.DocumentFacade
                 Dim acroForm As PdfAcroFormFacade = documentFacade.AcroForm
                 Dim fieldName As String = "Address"
@@ -29,12 +30,13 @@ Namespace ReplaceFormFieldWithImage
                 Next
 
                 processor.RemoveFormField(fieldName)
-                processor.SaveDocument("..\..\Result.pdf")
+                processor.SaveDocument("..\..\..\Result.pdf")
             End Using
+            Process.Start(New ProcessStartInfo("..\..\..\Result.pdf") With {.UseShellExecute = True})
         End Sub
 
         Private Shared Sub DrawImage(ByVal graphics As PdfGraphics, ByVal rect As PdfRectangle, ByVal x As Double, ByVal y As Double)
-            Dim image As Bitmap = New Bitmap("..\..\AddressFormField.png")
+            Dim image As DevExpress.Drawing.DXImage = DevExpress.Drawing.DXImage.FromStream(File.OpenRead("..\..\..\AddressFormField.png"))
             Dim aspectRatio As Double = image.Width \ image.Height
             Dim scaleX As Double = image.Width / rect.Width
             Dim scaleY As Double = image.Height / rect.Height

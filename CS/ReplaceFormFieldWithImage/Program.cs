@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using DevExpress.Pdf;
+using System.Diagnostics;
 
 namespace ReplaceFormFieldWithImage {
     class Program {
@@ -10,12 +11,12 @@ namespace ReplaceFormFieldWithImage {
             using (PdfDocumentProcessor processor = new PdfDocumentProcessor())
             {
 
-                // Load a PDF document with AcroForm data. 
-                processor.LoadDocument("..\\..\\InteractiveForm.pdf");
+                // Load a PDF document with AcroForm data.
+                processor.LoadDocument("..\\..\\..\\InteractiveForm.pdf");
                 PdfDocumentFacade documentFacade = processor.DocumentFacade;
                 PdfAcroFormFacade acroForm = documentFacade.AcroForm;
                 string fieldName = "Address";
-                PdfTextFormFieldFacade formField = acroForm.GetFormField(fieldName) as PdfTextFormFieldFacade;
+                PdfTextFormFieldFacade? formField = acroForm.GetFormField(fieldName) as PdfTextFormFieldFacade;
                 if (formField == null) return;
 
                 foreach (PdfWidgetFacade widget in formField)
@@ -36,13 +37,13 @@ namespace ReplaceFormFieldWithImage {
 
                 }
                 processor.RemoveFormField(fieldName);
-                processor.SaveDocument("..\\..\\Result.pdf");
+                processor.SaveDocument("..\\..\\..\\Result.pdf");
             }
+            Process.Start(new System.Diagnostics.ProcessStartInfo("..\\..\\..\\Result.pdf") { UseShellExecute = true });
         }
 
         static void DrawImage(PdfGraphics graphics, PdfRectangle rect, double x, double y) {
-
-            Bitmap image = new Bitmap("..\\..\\AddressFormField.png");
+            DevExpress.Drawing.DXImage image = DevExpress.Drawing.DXImage.FromStream(File.OpenRead("..\\..\\..\\AddressFormField.png"));
 
             double aspectRatio = image.Width / image.Height;
 
