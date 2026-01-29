@@ -1,6 +1,7 @@
 Imports System.Drawing
 Imports DevExpress.Pdf
 Imports System.Diagnostics
+Imports System.IO
 
 Namespace ReplaceFormFieldWithImage
 
