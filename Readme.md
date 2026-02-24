@@ -28,7 +28,7 @@ To accomplish this task, remove a field with an annotation and substitute it wit
     Passing `72` ensures no scaling occurs during transformation.  
     See [Coordinate Systems](https://documentation.devexpress.com/OfficeFileAPI/120032/PDF-Document-API/Coordinate-Systems) for more details.
 
-*   Remove the form field by calling the [`PdfDocumentProcessor.RemoveFormField`](https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.RemoveFormField.method) method.
+*   Remove the form field by calling the [`PdfDocumentProcessor.RemoveFormField`](https://docs.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.RemoveFormField(System.String)) method.
 *   Save the resulting document by calling the [`PdfDocumentProcessor.SaveDocument`](https://documentation.devexpress.com/OfficeFileAPI/DevExpress.Pdf.PdfDocumentProcessor.SaveDocument.overloads) method.
 
 
